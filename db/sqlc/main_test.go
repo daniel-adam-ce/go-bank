@@ -11,12 +11,13 @@ import (
 )
 
 var testQueries *Queries
+var testDB *sql.DB
 
 const dbDriver = "postgres"
 
 func TestMain(m *testing.M) {
-
-	err := godotenv.Load("../../.env")
+	var err error
+	err = godotenv.Load("../../.env")
 
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -25,10 +26,11 @@ func TestMain(m *testing.M) {
 	dbSource := os.Getenv("DB_SOURCE")
 	log.Print("test", dbSource)
 	// conn, err := pgxpool.New(context.Background(), dbSource)
-	conn, err := sql.Open(dbDriver, dbSource)
+
+	testDB, err = sql.Open(dbDriver, dbSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}
-	testQueries = New(conn)
+	testQueries = New(testDB)
 	os.Exit(m.Run())
 }
