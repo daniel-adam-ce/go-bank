@@ -13,7 +13,7 @@ func createRandomEntry(t *testing.T, account Account) Entry {
 
 	arg := CreateEntryParams{
 		AccountID: account.ID,
-		Amount:    util.RandomBalance(),
+		Amount:    util.RandomMoney(),
 	}
 
 	entry, err := testQueries.CreateEntry(context.Background(), arg)
@@ -24,6 +24,9 @@ func createRandomEntry(t *testing.T, account Account) Entry {
 	require.Equal(t, arg.AccountID, entry.AccountID)
 	require.Equal(t, account.ID, entry.AccountID)
 	require.Equal(t, arg.Amount, entry.Amount)
+
+	require.NotZero(t, entry.ID)
+	require.NotZero(t, entry.CreatedAt)
 
 	return entry
 }
