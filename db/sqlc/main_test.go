@@ -1,16 +1,18 @@
 package db
 
 import (
-	"context"
+	"database/sql"
 	"log"
 	"os"
 	"testing"
 
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 var testQueries *Queries
+
+const dbDriver = "postgres"
 
 func TestMain(m *testing.M) {
 
@@ -22,13 +24,11 @@ func TestMain(m *testing.M) {
 
 	dbSource := os.Getenv("DB_SOURCE")
 	log.Print("test", dbSource)
-	conn, err := pgxpool.New(context.Background(), dbSource)
-
+	// conn, err := pgxpool.New(context.Background(), dbSource)
+	conn, err := sql.Open(dbDriver, dbSource)
 	if err != nil {
-		log.Fatal("cannot connect to db: ", err)
+		log.Fatal("cannot connect to db:", err)
 	}
-
 	testQueries = New(conn)
-
 	os.Exit(m.Run())
 }
