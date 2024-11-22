@@ -3,38 +3,33 @@ package main
 import (
 	"database/sql"
 	"log"
-	"os"
 
 	"github.com/daniel-adam-ce/go-bank/api"
 	db "github.com/daniel-adam-ce/go-bank/db/sqlc"
-	"github.com/joho/godotenv"
+	"github.com/daniel-adam-ce/go-bank/util"
 	_ "github.com/lib/pq"
 )
-
-const dbDriver = "postgres"
 
 func main() {
 
 	var err error
-	err = godotenv.Load(".env")
+
+	config, err := util.LoadConfig(".")
 
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Error loading config: ", err)
 	}
 
-	dbSource := os.Getenv("DB_SOURCE")
-	serverAddress := os.Getenv("API_URL")
-	log.Print("test", dbSource)
 	// conn, err := pgxpool.New(context.Background(), dbSource)
 
-	conn, err := sql.Open(dbDriver, dbSource)
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
-		log.Fatal("cannot connect to db:", err)
+		log.Fatal("cannot connect to db: ", err)
 	}
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
 
-	err = server.Start(serverAddress)
+	err = server.Start(config.APIUrl)
 	if err != nil {
 		log.Fatal("cannot start server: ", err)
 	}
