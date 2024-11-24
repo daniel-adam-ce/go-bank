@@ -3,6 +3,9 @@ include .env
 postgres:
 	docker run --name postgres17 -p 5432:5432 -e POSTGRES_USER=${POSTGRES_USER} -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -d postgres:17-alpine
 
+postgresstart:
+	docker start postgres17
+
 createdb:
 	docker exec -it postgres17 createdb --username=${POSTGRES_USER} --owner=${POSTGRES_USER} ${POSTGRES_NAME}
 
@@ -27,4 +30,4 @@ server:
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/daniel-adam-ce/go-bank/db/sqlc Store
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc server mock
+.PHONY: postgres postgresstart createdb dropdb migrateup migratedown sqlc server mock
