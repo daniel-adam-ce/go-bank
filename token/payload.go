@@ -15,9 +15,11 @@ type Payload struct {
 	ExpiredAt time.Time `json:"expired_at"`
 }
 
-var ErrExpiredToken = errors.New("token has expired")
-var ErrInvalidToken = errors.New("token is invalid")
-var ErrMalformedToken = errors.New("token is malfored")
+var (
+	ErrExpiredToken   = errors.New("token is expired")
+	ErrInvalidToken   = errors.New("token is invalid")
+	ErrMalformedToken = errors.New("token is malfored")
+)
 
 func NewPayload(username string, duration time.Duration) (*Payload, error) {
 	tokenID, err := uuid.NewRandom()
