@@ -13,16 +13,16 @@ dropdb:
 	docker exec -t postgres17 dropdb ${POSTGRES_NAME}
 
 migrateup:
-	migrate -path db/migration -database "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_NAME}?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_NAME}${PG_OPTIONS}" -verbose up
 
 migrateup1:
-	migrate -path db/migration -database "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_NAME}?sslmode=disable" -verbose up 1
+	migrate -path db/migration -database "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_NAME}${PG_OPTIONS}" -verbose up 1
 
 migratedown:
-	migrate -path db/migration -database "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_NAME}?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_NAME}${PG_OPTIONS}" -verbose down
 
 migratedown1:
-	migrate -path db/migration -database "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_NAME}?sslmode=disable" -verbose down 1
+	migrate -path db/migration -database "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_NAME}${PG_OPTIONS}" -verbose down 1
 
 migratecreate: 
 	migrate create -ext sql -dir db/migration -seq ${name}
