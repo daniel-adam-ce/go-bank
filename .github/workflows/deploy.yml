@@ -14,9 +14,9 @@ jobs:
     - name: Check out code 
       uses: actions/checkout@v4
       
-    - name: Create .env
-      run:  |
-        echo "${{ secrets.DEV_ENV }}" > .env
+    # - name: Create .env
+    #   run:  |
+    #     echo "${{ secrets.DEV_ENV }}" > .env
       
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -27,6 +27,9 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Load secrets into .env
+      run: aws secretsmanager get-secret-value --secret-id go_bank --query SecretString --output text | jq 'to_entries|map("\(.key)=\(.value)")|.[]' --raw-output > .env
 
     - name: Build, tag, and push docker image to Amazon ECR
       env:
