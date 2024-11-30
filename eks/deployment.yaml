@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-bank-api-deployment
+  labels:
+    app: go-bank-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-bank-api
+  template:
+    metadata:
+      labels:
+        app: go-bank-api
+    spec:
+      containers:
+      - name: go-bank-api
+        image: 983088700631.dkr.ecr.us-east-1.amazonaws.com/gobank:766b7505e0150434c9ff8fd12cb6f5974d459bc9
+        ports:
+        - containerPort: 8080
