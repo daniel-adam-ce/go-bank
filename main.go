@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	"github.com/daniel-adam-ce/go-bank/api"
@@ -20,6 +21,7 @@ func main() {
 		log.Fatal("Error loading config: ", err)
 	}
 
+	fmt.Printf("conn: %s", config.DBSource)
 	// conn, err := pgxpool.New(context.Background(), dbSource)
 
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
