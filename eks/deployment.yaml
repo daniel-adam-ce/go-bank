@@ -17,5 +17,6 @@ spec:
       containers:
       - name: go-bank-api
         image: 983088700631.dkr.ecr.us-east-1.amazonaws.com/gobank:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
