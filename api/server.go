@@ -52,6 +52,10 @@ func (server *Server) setupRouter() {
 	// this is not RESTful
 	router.POST("/users/login", server.loginUser)
 
+	// session routes
+	// this is not restful
+	router.POST("/tokens/refresh", server.renewAccessToken)
+
 	// add auth middleware
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
 
