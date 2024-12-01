@@ -6,13 +6,19 @@ on:
 
 jobs:
 
-  build:
+  deploy:
     name: Build image
     runs-on: ubuntu-latest
 
     steps:
     - name: Check out code 
       uses: actions/checkout@v4
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v4
+      with:
+        version: '1.31.0' # default is latest stable
+      id: install
       
     # - name: Create .env
     #   run:  |
@@ -37,5 +43,15 @@ jobs:
         ECR_REPOSITORY: gobank
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t latest .
+        docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
+
+    - name: Deploy image to Amazon EKS
+      run: |
+        kubectl apply -f eks/aws-auth.yaml
+        kubectl apply -f eks/deployment.yaml
+        kubectl apply -f eks/service.yaml
+        kubectl apply -f eks/ingress.yaml
+        export ACME_EMAIL=${{ secrets.ACME_EMAIL }}
+        envsubst < eks/issuer.yaml | kubectl apply -f -
+        kubectl apply -f eks/issuer.yaml

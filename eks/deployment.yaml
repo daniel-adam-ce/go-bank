@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: go-bank-api
-        image: 983088700631.dkr.ecr.us-east-1.amazonaws.com/gobank:766b7505e0150434c9ff8fd12cb6f5974d459bc9
+        image: 983088700631.dkr.ecr.us-east-1.amazonaws.com/gobank:latest
         ports:
         - containerPort: 8080
