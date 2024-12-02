@@ -39,4 +39,10 @@ server:
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/daniel-adam-ce/go-bank/db/sqlc Store
 
-.PHONY: postgres postgresstart createdb dropdb migrateup migratedown sqlc server mock
+dbdocs:
+	dbdocs build doc/db.dbml
+
+db_schema:
+	dbml2sql --postgres -o doc/schema.sql doc/db.dbml
+
+.PHONY: postgres postgresstart createdb dropdb migrateup migratedow nmigrateup1 migratedown1 sqlc server mock dbdocs db_schema
