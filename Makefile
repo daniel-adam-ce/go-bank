@@ -33,6 +33,10 @@ sqlc:
 test:
 	go test -v -cover ./...
 
+testpkg:
+	go test ./...  -coverpkg=./... -coverprofile ./coverage.out
+	go tool cover -func ./coverage.out
+
 server:
 	go run main.go
 
@@ -45,4 +49,4 @@ dbdocs:
 db_schema:
 	dbml2sql --postgres -o doc/schema.sql doc/db.dbml
 
-.PHONY: postgres postgresstart createdb dropdb migrateup migratedow nmigrateup1 migratedown1 sqlc server mock dbdocs db_schema
+.PHONY: postgres postgresstart createdb dropdb migrateup migratedow nmigrateup1 migratedown1 sqlc server mock dbdocs db_schema test testpkg
