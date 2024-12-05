@@ -7,12 +7,14 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/daniel-adam-ce/go-bank/api"
 	db "github.com/daniel-adam-ce/go-bank/db/sqlc"
 	_ "github.com/daniel-adam-ce/go-bank/doc/statik"
 	"github.com/daniel-adam-ce/go-bank/gapi"
 	"github.com/daniel-adam-ce/go-bank/pb"
 	"github.com/daniel-adam-ce/go-bank/util"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	_ "github.com/lib/pq"
 	"github.com/rakyll/statik/fs"
@@ -31,8 +33,7 @@ func main() {
 		log.Fatal("Error loading config: ", err)
 	}
 
-	// fmt.Printf("conn: %s", config.DBSource)
-	// conn, err := pgxpool.New(context.Background(), dbSource)
+	runDBMigration(config.MigrationURL, config.DBSource)
 
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
@@ -46,18 +47,31 @@ func main() {
 	runGrpcServer(config, store)
 }
 
-func runGinServer(config util.Config, store db.Store) {
-
-	server, err := api.NewServer(config, store)
+func runDBMigration(migrationURL string, dbSource string) {
+	m, err := migrate.New(migrationURL, dbSource)
 	if err != nil {
-		log.Fatal("cannot create server: ", err)
+		log.Fatal("cannot create a new migrate instance: ", err)
 	}
 
-	err = server.Start(config.APIUrl)
-	if err != nil {
-		log.Fatal("cannot start server: ", err)
+	if err = m.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatal("failed to run mgrate up: ", err)
 	}
+
+	log.Println("db migrated successfully")
 }
+
+// func runGinServer(config util.Config, store db.Store) {
+
+// 	server, err := api.NewServer(config, store)
+// 	if err != nil {
+// 		log.Fatal("cannot create server: ", err)
+// 	}
+
+// 	err = server.Start(config.APIUrl)
+// 	if err != nil {
+// 		log.Fatal("cannot start server: ", err)
+// 	}
+// }
 
 func runGrpcServer(config util.Config, store db.Store) {
 	server, err := gapi.NewServer(config, store)
