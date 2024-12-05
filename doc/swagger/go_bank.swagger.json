@@ -1,8 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "rpc_create_user.proto",
-    "version": "version not set"
+    "title": "A Bit of Everything",
+    "version": "1.0",
+    "contact": {
+      "name": "Daniel Adam",
+      "url": "https://github.com/daniel-adam-ce/go-bank"
+    }
   },
   "tags": [
     {
