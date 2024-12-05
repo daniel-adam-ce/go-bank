@@ -12,7 +12,7 @@ option go_package = "github.com/daniel-adam-ce/go-bank/pb";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
-    title: "A Bit of Everything"
+    title: "Go Bank"
     version: "1.0"
     contact: {
       name: "Daniel Adam"
