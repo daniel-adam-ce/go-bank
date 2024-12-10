@@ -18,7 +18,7 @@ type RedisTaskDistributor struct {
 	client *asynq.Client
 }
 
-func NewRedisTaskDistributor(redisOpt asynq.RedisClusterClientOpt) TaskDistributor {
+func NewRedisTaskDistributor(redisOpt asynq.RedisClientOpt) TaskDistributor {
 	client := asynq.NewClient(redisOpt)
 	return &RedisTaskDistributor{
 		client: client,
