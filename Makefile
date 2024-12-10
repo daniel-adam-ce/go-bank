@@ -59,4 +59,7 @@ proto:
     proto/*.proto
 	statik -src=./doc/swagger -dest=./doc
 
-.PHONY: postgres postgresstart createdb dropdb migrateup migratedow nmigrateup1 migratedown1 sqlc server mock dbdocs db_schema test testpkg proto
+redis:
+	docker run --name redis -p 6379:6379 -d redis:7.4.1-alpine
+
+.PHONY: postgres postgresstart createdb dropdb migrateup migratedow nmigrateup1 migratedown1 sqlc server mock dbdocs db_schema test testpkg proto redis
