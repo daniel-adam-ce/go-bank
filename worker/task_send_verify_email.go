@@ -2,7 +2,6 @@ package worker
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 
@@ -49,9 +48,11 @@ func (processor *RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Cont
 	}
 
 	user, err := processor.store.GetUser(ctx, payload.Username)
-	if err == sql.ErrNoRows {
-		return fmt.Errorf("user doesn't exist: %w", asynq.SkipRetry)
-	}
+
+	// commenting out to allow for retry
+	// if err == sql.ErrNoRows {
+	// 	return fmt.Errorf("user doesn't exist: %w", asynq.SkipRetry)
+	// }
 
 	if err != nil {
 		return fmt.Errorf("failed to get user: %w", err)
