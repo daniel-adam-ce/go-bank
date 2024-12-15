@@ -5,7 +5,7 @@ package pb;
 option go_package = "github.com/daniel-adam-ce/go-bank/pb";
 
 message VerifyEmailRequest {
-    int64 email = 1;
+    int64 email_id = 1;
     string secret_code = 2;
 }
 

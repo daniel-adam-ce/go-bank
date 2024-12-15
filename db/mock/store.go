@@ -133,10 +133,10 @@ func (mr *MockStoreMockRecorder) CreateUser(ctx, arg any) *gomock.Call {
 }
 
 // CreateUserTx mocks base method.
-func (m *MockStore) CreateUserTx(ctx context.Context, arg db.CreaterUserTxParams) (db.CreaterUserTxResult, error) {
+func (m *MockStore) CreateUserTx(ctx context.Context, arg db.CreateUserTxParams) (db.CreateUserTxResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateUserTx", ctx, arg)
-	ret0, _ := ret[0].(db.CreaterUserTxResult)
+	ret0, _ := ret[0].(db.CreateUserTxResult)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
