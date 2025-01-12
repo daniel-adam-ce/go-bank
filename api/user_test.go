@@ -295,6 +295,26 @@ func TestLoginUserAPI(t *testing.T) {
 			},
 		},
 		{
+			name: "InternalError2",
+			body: gin.H{
+				"username": user.Username,
+				"password": userPassword,
+			},
+			buildStubs: func(store *mockdb.MockStore) {
+				store.EXPECT().
+					GetUser(gomock.Any(), gomock.Eq(user.Username)).
+					Times(1).
+					Return(user, nil)
+				store.EXPECT().
+					CreateSession(gomock.Any(), gomock.Any()).
+					Times(1).
+					Return(db.Session{}, sql.ErrConnDone)
+			},
+			checkResponse: func(recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusInternalServerError, recorder.Code)
+			},
+		},
+		{
 			name: "InvalidUsername",
 			body: gin.H{
 				"username": "invalid-user#1",
