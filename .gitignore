@@ -1,5 +1,4 @@
 **/*.env
 **/*coverage.out
 **/*dbml-error.log
-**/statik
 vendor/
